@@ -30,7 +30,7 @@ sudo apt install -y \
   steghide \
   foremost \
   file \
-  strings \
+  binutils \
   ltrace \
   strace \
   gdb \
@@ -42,9 +42,14 @@ sudo apt install -y \
   ripgrep \
   xclip
 
-echo "[*] Installing Python tooling..."
-python3 -m pip install --user --upgrade pip
-python3 -m pip install --user \
+echo "[*] Installing Python tooling in a local virtual environment..."
+
+sudo apt install -y python3-full python3-venv pipx
+
+python3 -m venv "$HOME/.ctf-venv"
+"$HOME/.ctf-venv/bin/python" -m pip install --upgrade pip
+
+"$HOME/.ctf-venv/bin/pip" install \
   pwntools \
   requests \
   beautifulsoup4 \
@@ -52,6 +57,26 @@ python3 -m pip install --user \
   z3-solver \
   ropper \
   angr
+
+mkdir -p "$HOME/.local/bin"
+
+cat > "$HOME/.local/bin/ctf-python" << 'EOF'
+#!/usr/bin/env bash
+source "$HOME/.ctf-venv/bin/activate"
+exec python "$@"
+EOF
+
+cat > "$HOME/.local/bin/ctf-pip" << 'EOF'
+#!/usr/bin/env bash
+source "$HOME/.ctf-venv/bin/activate"
+exec pip "$@"
+EOF
+
+chmod +x "$HOME/.local/bin/ctf-python" "$HOME/.local/bin/ctf-pip"
+
+echo "[+] Python CTF virtual environment created at ~/.ctf-venv"
+echo "[+] Use: ctf-python script.py"
+echo "[+] Use: ctf-pip install package-name"
 
 echo "[*] Installing VS Code..."
 if ! command -v code >/dev/null 2>&1; then
