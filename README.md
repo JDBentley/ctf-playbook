@@ -128,7 +128,7 @@ events/ctf/
 Creates:
 
 ```text
-events/hack-red-con-2026/challenges/web/login-bypass/
+events/ctf/challenge/category/challenge name/
 ├── notes.md
 ├── solve.md
 ├── session-log.md
@@ -202,7 +202,7 @@ ctf-tmux hack-red
 
 # Create challenge
 ../../scripts/new-challenge.sh ctf category challenge
-cd challenges/web/login-bypass
+cd ctf/category/challenge
 ```
 
 ---
